@@ -1,11 +1,11 @@
 /************************************************************************************************
  * avrio.h 
  *		AVRIO defines a set of i/o primitives that work on AVR pins.
-jkjkjk
  *
  * vi:ts=4
  *
- *	Copyright (C) 2009,2010 Bill Perry. (bperrybap@opensource.billsworld.billandterrie.com)
+ *	Copyright (C) 2009,2010,2011,2012
+ *	 Bill Perry. (bperrybap@opensource.billsworld.billandterrie.com)
  *
  *	This file is part of AVRIO.
  *
