@@ -4,7 +4,7 @@
  *
  * vi:ts=4
  *
- *	Copyright (C) 2009,2010,2011,2012
+ *	Copyright (C) 2009,2010,2011,2012,2013
  *	 Bill Perry. (bperrybap@opensource.billsworld.billandterrie.com)
  *
  *	This file is part of AVRIO.
@@ -299,16 +299,16 @@ volatile void *avrportaddr = digitalPinToPortReg(pin);
  * Define the avrio convenience primitives.
  */
 #define avrio_PinMode(pin, dir) 		avrio_WriteBit(AVRIO_DDRREG, pin, dir)
-#define avrio_PinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7) \
- 	 avrio_Write8Bits(AVRIO_DDRREG, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7)
+#define avrio_PinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits) \
+ 	 avrio_Write8Bits(AVRIO_DDRREG, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits)
 
 #define avrio_ReadPin(pin) 			avrio_ReadBit(AVRIO_PINREG, pin)
 #define avrio_Read8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7) \
  	 avrio_Read8Bits(AVRIO_PINREG, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7)
 
 #define avrio_WritePin(pin, data)		avrio_WriteBit(AVRIO_PORTREG, pin, data)
-#define avrio_Write8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7) \
- 	 avrio_Write8Bits(AVRIO_PORTREG, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7)
+#define avrio_Write8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, byteval) \
+ 	 avrio_Write8Bits(AVRIO_PORTREG, pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, byteval)
 
 
 /*
@@ -321,12 +321,14 @@ volatile void *avrportaddr = digitalPinToPortReg(pin);
 
 #define avrio_digitalWrite(pin, data)		avrio_WritePin(pin, data)
 #define avrio_digitalWritePin(pin, data)	avrio_WritePin(pin, data)
-#define avrio_digitalWrite8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7) \
- 	 avrio_Write8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7)
+#define avrio_digitalWrite8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, byteval) \
+ 	 avrio_Write8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, byteval)
 
 
 #define avrio_pinMode(pin, dir) avrio_PinMode(pin, dir)
-#define avrio_pinMode8Pins(pin, dir) avrio_PinMode8Pins(pin, dir)
+#define avrio_pinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits) \
+ 	 avrio_PinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits)
+
 
 
 /************************************************************************************************
