@@ -1,68 +1,76 @@
-/************************************************************************************************
+/******************************************************************************
  * avrio.h 
  *		AVRIO defines a set of i/o primitives that work on AVR pins.
  *
  * vi:ts=4
  *
- *	Copyright (C) 2009,2010,2011,2012,2013
- *	 Bill Perry. (bperrybap@opensource.billsworld.billandterrie.com)
+ *	Copyright (C) 2009-2013 Bill Perry.
+ *	 (bperrybap@opensource.billsworld.billandterrie.com)
  *
- *	This file is part of AVRIO.
+ *      This file is part of AVRIO.
+ *		It is part of the mcu-io project: http://code.google.com/p/mcu-io/
  *
- *	AVRIO is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License (GPL) as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
+ *      AVRIO is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License (GPL) as published
+ *		by the Free Software Foundation, either version 3 of the License, or
+ *      (at your option) any later version.
  *
- *	AVRIO is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
+ *      AVRIO is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
  *
- *	You should have received a copy of the GNU General Public License
- *	along with AVRIO.  If not, see <http://www.gnu.org/licenses/>.
- *		http://www.gnu.org/licenses/gpl-3.0-standalone.html
- *		http://www.gnu.org/licenses/gpl-3.0.txt
+ *      You should have received a copy of the GNU General Public License
+ *      along with AVRIO.  If not, see <http://www.gnu.org/licenses/>.
+ *              http://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *              http://www.gnu.org/licenses/gpl-3.0.txt
  *
- ************************************************************************************************
+ *
+ ******************************************************************************
  *
  *
  *	These primitives are for setting/reading digital levels on the pins.
  *
  *	When used with the GCC optimization, the final code generated will be the 
- *	smallest amount of AVR instructions possible to set/clear or read the desired i/o bits.
+ *	smallest amount of AVR instructions possible to set/clear or read the
+ *	desired i/o bits.
  *
  *	It introduces a new AVR s/w i/o concept.
  *	It is wrapped around the concept of an "avrpin".
- *	An avrpin is a compile-time token that can be used to locate a particular avrpin.
- *	It is different than the bitmask scheme used by the standard AVR C headers or
- *	the simple integer scheme as currently used by Arduino.
- *	avrpin has encoded into it: the port, A, B, C, etc, as well as the bit information
- *	within that port.
+ *	An avrpin is a compile-time token that can be used to locate a particular
+ *	avrpin.
+ *	It is different than the bitmask scheme used by the standard AVR C headers
+ *	or the simple integer scheme as currently used by Arduino.
+ *	avrpin has encoded into it: the port, A, B, C, etc, as well as the bit
+ *  information within that port.
  *
  *	What is intentionally not encoded in it is the actual register type 
  *	of choice: DDR, PIN, or PORT.
- *	Therefore, the register type of choice must be indicated to the primitives using
- *	the correspending values: AVRIO_DDRREG, AVRIO_PINREG, AVRIO_PORTREG
+ *	Therefore, the register type of choice must be indicated to the primitives
+ *	using the correspending values: AVRIO_DDRREG, AVRIO_PINREG, AVRIO_PORTREG
  *
  *
  *	Special Note: While avrpin format is very different from arduino pin#s,
- *					in arduino environments, avrio will map arduino pin#s to avrpins
- *					on the fly so arduino users can use arduino pin#s with the primitives.
- *					This capability requires the use a mapping macro digitalPinToPortReg()
+ *					in arduino environments, avrio will map arduino pin#s to
+ *					avrpins on the fly so arduino users can use arduino pin#s
+ *					with the primitives.
+ *					This capability requires the use a mapping macro:
+ *						 digitalPinToPortReg()
  *					which should be provided by an inluding an arduino header file.
  *					That header file *MUST* be included before including this header.
  *
  *	The pin parameter used in all the primitives will automaticaly adapt to different environments and
  *	suports multiple different style defintions.
  *
- *	In native AVR (non arduino) enviroments, the pin parameter should be specified using the
- *	pin defintions near the end of this header file.
- *	These pin definitions allow directly specifying a specific AVR pin using a PIN_Pb syntax.
+ *	In native AVR (non arduino) enviroments, the pin parameter should be
+ *	specified using the pin defintions near the end of this header file.
+ *	These pin definitions allow directly specifying a specific AVR pin using
+ *	a PIN_Pb syntax.
  *	where Pb represents a PORT and a pin#.
  *	This means to specify port D bit 3 would be PIN_D3
  *
- *	For the time being, naked constants can also be used for pins on AVR ports A-F.
+ *	For the time being, naked constants can also be used for pins on
+ *  AVR ports A-F.
  *	So PORTD pin 3 could also be specified by avr pin 0xd3
  *
  *	Arduino users may use either arduino pin#s, or the raw PIN_Pb style naming.
@@ -101,7 +109,7 @@
  *	primitives: 
  *
  *		avrio_pinMode(pin, dir)
- *		avrio_pinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dir)
+ *		avrio_pinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits)
  *
  *		avrio_digitalWrite(pin, pinval)
  *		avrio_digitalWritepin(pin, pinval)
@@ -136,6 +144,7 @@
  *
  *
  */
+
 /************************************************************************************************/
 
 #ifndef _AVRIO_AVRIO_
@@ -327,8 +336,7 @@ volatile void *avrportaddr = digitalPinToPortReg(pin);
 
 #define avrio_pinMode(pin, dir) avrio_PinMode(pin, dir)
 #define avrio_pinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits) \
- 	 avrio_PinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits)
-
+	 avrio_PinMode8Pins(pin0, pin1, pin2, pin3, pin4, pin5, pin6, pin7, dirbits)
 
 
 /************************************************************************************************
